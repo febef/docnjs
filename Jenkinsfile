@@ -38,7 +38,7 @@ pipeline {
 
     stage('Deploy') {
       steps {
-        sh 'docker run -d -p 8080:8180' --name dev-api1 dev-api'
+        sh 'docker run -d -p 8080:8180 --name dev-api1 dev-api'
       }
     }
 
