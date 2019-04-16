@@ -32,7 +32,7 @@ pipeline {
 
     stage ('Build image') {
       steps {
-        sh 'docker build -t dev-api'
+        sh 'docker build -t dev-api .'
       }
     }
 
