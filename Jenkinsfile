@@ -17,7 +17,7 @@ pipeline {
       steps {
         sleep 1
         sh '''
-          docker rm -f dev-API
+          docker rm -f dev-API || true
         '''
       }
     }
