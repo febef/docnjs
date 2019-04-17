@@ -20,36 +20,30 @@ pipeline {
 
     stage('Clear Container') {
       steps {
-        sleep 1
-        sh '''
-          docker rm -f dev-api1 || true
-        '''
+        script {
+          sh '''
+            docker rm -f $BRANCH_NAME-api1 || true
+          '''
+        }
       }
     }
 
-    stage('DB Dump & env') {
+    stage ('Build Docker image') {
       steps {
-        sh '''
-          #sed -i "s;8080;8180;g" Dockerfile
-        '''
-      }
-    }
 
-    stage ('Build image') {
-      steps {
-        sh 'docker build -t dev-api .'
+        sh 'docker build -t $BRANCH_NAME-api .'
       }
     }
 
     stage('Deploy') {
       steps {
-        sh 'docker run -d -p 8180:8080 --name dev-api1 dev-api'
+        sh 'docker run -d -p $PORT:8080 --name $BRANCH_NAME-api1 $BRANCH_NAME-api'
       }
     }
 
     stage('wait for services up') {
       steps {
-        timeout(time: 5) {
+        timeout(time: 2) {
           waitUntil() {
             script {
               def r = sh script: 'curl http://10.46.20.21:8180 | grep Hello; VAR=$?; exit $VAR', returnStatus: true
@@ -65,10 +59,11 @@ pipeline {
         sh 'echo functional test'
       }
     }
+
   }
 
   environment {
-    PORT = '82'
+    PORT = '8180'
     IP = '10.46.20.21'
     DB_ROOT_PASSWORD = 'password'
     DB_NAME = 'wordpress'
