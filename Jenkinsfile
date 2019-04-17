@@ -25,7 +25,7 @@ pipeline {
     stage('DB Dump & env') {
       steps {
         sh '''
-          sed -i "s;8080;8180;g" Dockerfile
+          #sed -i "s;8080;8180;g" Dockerfile
         '''
       }
     }
