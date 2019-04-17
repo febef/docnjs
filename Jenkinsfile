@@ -1,5 +1,10 @@
 pipeline {
   agent any
+
+  triggers {
+    cron('H/20 * * * *')
+  }
+
   stages {
 
     stage('SonarQube analysis') {
